@@ -7,10 +7,11 @@ import {
 } from "firebase/auth";
 
 type ModalType = {
-	hideModal: () => void;
+	closeModal: () => void;
+	setIsLoggedIn: () => void;
 };
 
-const Modal: React.FC<ModalType> = ({ hideModal }) => {
+const Modal: React.FC<ModalType> = ({ closeModal, setIsLoggedIn }) => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
@@ -26,9 +27,10 @@ const Modal: React.FC<ModalType> = ({ hideModal }) => {
 
 			// Handle successful login
 			const user = userCredential.user;
-			console.log("User logged in:", user);
+			console.log("User logged in");
 			setError(null); // Reset error state on successful login
-			hideModal();
+			setIsLoggedIn();
+			closeModal();
 		} catch (error) {
 			// Handle errors
 			console.error("Login error:", error);
@@ -45,7 +47,7 @@ const Modal: React.FC<ModalType> = ({ hideModal }) => {
 	return (
 		<div className={styles.modalWrapper}>
 			<div className={styles.modal}>
-				<div className={styles.closeBtn} onClick={hideModal}>
+				<div className={styles.closeBtn} onClick={closeModal}>
 					X
 				</div>
 				<h3>Login</h3>

@@ -21,6 +21,12 @@
 	background-color: transparent;
 	padding: 15px;
 }
+.welcome {
+	display: flex;
+	color: rgb(11, 208, 142);
+	flex: 1;
+	justify-content: center;
+}
 .menu {
 	display: flex;
 	flex-direction: row;

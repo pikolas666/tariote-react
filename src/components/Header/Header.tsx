@@ -1,34 +1,49 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./Header.module.css";
 import Image from "next/image";
 import logo from "../../assets/tariotelogo3.png";
 import { useRouter } from "next/router";
-import Modal from "../Modal/Modal";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
-const Header = () => {
+type HeaderProps = {
+	openModal: () => void;
+	handleLogout: () => void;
+};
+
+const Header: React.FC<HeaderProps> = ({ handleLogout, openModal }) => {
 	const router = useRouter();
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const auth = getAuth();
 	const [isAdminPanel, setIsAdminPanel] = useState(false);
-	const [isShowModal, setIsSHowModal] = useState(false);
+	const [user, setUser] = useState<User | null>(null);
 
 	useEffect(() => {
-		if (router.pathname === "/admin") {
-			setIsAdminPanel(true);
-		} else {
-			setIsAdminPanel(false);
-		}
-	}, [router.pathname]);
+		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+			if (authUser) {
+				setUser(authUser);
+			} else {
+				setUser(null);
+			}
+		});
+
+		setIsAdminPanel(router.pathname === "/admin");
+
+		return () => {
+			unsubscribe();
+		};
+	}, [router.pathname, auth]);
+
+	const logOut = () => {
+		handleLogout();
+		auth.signOut();
+		console.log("user logged out");
+	};
+	const capitalizeFirstLetter = (text: string) => {
+		return text.charAt(0).toUpperCase() + text.slice(1);
+	};
 
 	return (
 		<header className={styles.header}>
-			{isShowModal && (
-				<Modal
-					hideModal={() => {
-						setIsSHowModal(false);
-					}}
-				></Modal>
-			)}
 			<div>
 				<Link href="/">
 					<Image
@@ -41,6 +56,15 @@ const Header = () => {
 					/>
 				</Link>
 			</div>
+			{user && (
+				<p className={styles.welcome}>
+					Labas,{" "}
+					{user.email && user.email.includes(".")
+						? capitalizeFirstLetter(user.email.split(".")[0])
+						: "No email available"}
+					!
+				</p>
+			)}
 			<input className={styles.menuToggle} type="checkbox" />
 
 			<div className={styles.menuButton}></div>
@@ -58,24 +82,22 @@ const Header = () => {
 				<li>
 					<Link href="/contacts">Kontaktai</Link>
 				</li>
-				{isAdminPanel && !isLoggedIn ? (
-					// Show login link in the admin panel
+				{isAdminPanel && !user ? (
 					<li>
 						<Link
 							className={styles.loginBtn}
 							href="#"
 							onClick={() => {
-								setIsSHowModal(true);
+								openModal();
 							}}
 						>
 							Login
 						</Link>
 					</li>
 				) : (
-					// Show logout button on other pages when isLoggedIn is true
-					isLoggedIn && (
+					user && (
 						<li>
-							<Link className={styles.logoutBtn} href="#">
+							<Link onClick={logOut} className={styles.logoutBtn} href="#">
 								Logout
 							</Link>
 						</li>

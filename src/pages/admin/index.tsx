@@ -1,10 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
 import styles from "./admin.module.css";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { User } from "firebase/auth";
 
 const Admin = () => {
+	const auth = getAuth();
+	const [user, setUser] = useState<User | null>(null);
 	const [aboutMeText, setAboutMeText] = useState("");
 	const [contactsText, setContactsText] = useState("");
+
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			// This function will be called whenever the authentication state changes
+			if (user) {
+				// User is signed in
+				setUser(user);
+			} else {
+				// User is signed out
+				setUser(null);
+			}
+		});
+
+		// Clean up the subscription when the component unmounts
+		return () => unsubscribe();
+	}, [auth]);
+
+	// Now, 'user' will be either the user object if logged in or null if logged out
 
 	const showAboutMeText = () => {
 		// Fetch aboutMe text and update the state
@@ -38,46 +60,48 @@ const Admin = () => {
 
 	return (
 		<PageTemplate>
-			<div className={styles.paragTiny}>
-				{/* About Me */}
-				<div className={styles.tinyContacts}>
-					<h2 className={styles.titleh2}>Apie mane</h2>
-					<form onSubmit={updateAboutMeText}>
-						<textarea
-							value={aboutMeText}
-							onChange={(e) => setAboutMeText(e.target.value)}
-						/>
+			{user && (
+				<div className={styles.paragTiny}>
+					{/* About Me */}
+					<div className={styles.tinyContacts}>
+						<h2 className={styles.titleh2}>Apie mane</h2>
+						<form onSubmit={updateAboutMeText}>
+							<textarea
+								value={aboutMeText}
+								onChange={(e) => setAboutMeText(e.target.value)}
+							/>
 
-						<button type="submit" className={styles.applybutton}>
-							{/* eslint-disable */}
-							Uzkrauti "apie mane" teksta
-							{/* eslint-enable */}
-						</button>
-						<button onClick={showAboutMeText} className={styles.applybutton}>
-							Keisti teksta
-						</button>
-					</form>
-				</div>
+							<button type="submit" className={styles.applybutton}>
+								{/* eslint-disable */}
+								Uzkrauti "apie mane" teksta
+								{/* eslint-enable */}
+							</button>
+							<button onClick={showAboutMeText} className={styles.applybutton}>
+								Keisti teksta
+							</button>
+						</form>
+					</div>
 
-				{/* Contacts */}
-				<div className={styles.tinyContacts}>
-					<h2 className={styles.titleh2}>Kontaktai</h2>
-					<form onSubmit={updateContactsText}>
-						<textarea
-							value={contactsText}
-							onChange={(e) => setContactsText(e.target.value)}
-						/>
-						<button type="submit" className={styles.applybutton}>
-							{/* eslint-disable */}
-							Uzkrauti "kontaktai" teksta
-							{/* eslint-enable */}
-						</button>
-						<button onClick={showContactsText} className={styles.applybutton}>
-							Keisti teksta
-						</button>
-					</form>
+					{/* Contacts */}
+					<div className={styles.tinyContacts}>
+						<h2 className={styles.titleh2}>Kontaktai</h2>
+						<form onSubmit={updateContactsText}>
+							<textarea
+								value={contactsText}
+								onChange={(e) => setContactsText(e.target.value)}
+							/>
+							<button type="submit" className={styles.applybutton}>
+								{/* eslint-disable */}
+								Uzkrauti "kontaktai" teksta
+								{/* eslint-enable */}
+							</button>
+							<button onClick={showContactsText} className={styles.applybutton}>
+								Keisti teksta
+							</button>
+						</form>
+					</div>
 				</div>
-			</div>
+			)}
 
 			{/* Gallery */}
 			<div className={styles.Adminform}>
