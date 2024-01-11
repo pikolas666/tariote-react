@@ -5,6 +5,7 @@ import Image from "next/image";
 import logo from "../../assets/tariotelogo3.png";
 import { useRouter } from "next/router";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { useUser } from "../../pages/_app";
 
 type HeaderProps = {
 	openModal: () => void;
@@ -15,22 +16,10 @@ const Header: React.FC<HeaderProps> = ({ handleLogout, openModal }) => {
 	const router = useRouter();
 	const auth = getAuth();
 	const [isAdminPanel, setIsAdminPanel] = useState(false);
-	const [user, setUser] = useState<User | null>(null);
+	const user = useUser();
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-			if (authUser) {
-				setUser(authUser);
-			} else {
-				setUser(null);
-			}
-		});
-
 		setIsAdminPanel(router.pathname === "/admin");
-
-		return () => {
-			unsubscribe();
-		};
 	}, [router.pathname, auth]);
 
 	const logOut = () => {

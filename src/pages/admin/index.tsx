@@ -2,29 +2,15 @@ import React, { useEffect, useState } from "react";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
 import styles from "./admin.module.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { User } from "firebase/auth";
+import { useUser } from "../../pages/_app";
 
 const Admin = () => {
 	const auth = getAuth();
-	const [user, setUser] = useState<User | null>(null);
+
 	const [aboutMeText, setAboutMeText] = useState("");
 	const [contactsText, setContactsText] = useState("");
 
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			// This function will be called whenever the authentication state changes
-			if (user) {
-				// User is signed in
-				setUser(user);
-			} else {
-				// User is signed out
-				setUser(null);
-			}
-		});
-
-		// Clean up the subscription when the component unmounts
-		return () => unsubscribe();
-	}, [auth]);
+	const user = useUser();
 
 	// Now, 'user' will be either the user object if logged in or null if logged out
 

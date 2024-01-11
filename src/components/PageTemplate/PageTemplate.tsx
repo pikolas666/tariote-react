@@ -42,12 +42,7 @@ const PageTemplate: React.FC<PageTemplateType> = ({ children }) => {
 				{/* Pass isLoggedIn and openModal as props to Header */}
 				<Header handleLogout={handleLogout} openModal={openModal} />
 				{/* Pass closeModal as a prop to Modal */}
-				{isShowModal && (
-					<Modal
-						setIsLoggedIn={() => setIsLoggedIn(true)}
-						closeModal={closeModal}
-					/>
-				)}
+				{isShowModal && <Modal closeModal={closeModal} />}
 				<div className={styles.main}>{children}</div>
 				<Footer />
 			</div>

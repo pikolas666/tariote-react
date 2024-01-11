@@ -1,9 +1,14 @@
 // _app.tsx
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { FirebaseApp } from "../../firebaseConfig";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { FirebaseApp } from "../../firebaseConfig";
+
+// Create a context for the user
+const UserContext = createContext<User | null>(null);
+
+export const useUser = () => useContext(UserContext);
 
 export const auth = getAuth(FirebaseApp);
 
@@ -23,7 +28,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 		return () => unsubscribe();
 	}, []);
 
-	return <Component {...pageProps} user={user} />;
+	return (
+		<UserContext.Provider value={user}>
+			<Component {...pageProps} />
+		</UserContext.Provider>
+	);
 };
 
 export default MyApp;

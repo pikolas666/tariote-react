@@ -8,10 +8,9 @@ import {
 
 type ModalType = {
 	closeModal: () => void;
-	setIsLoggedIn: () => void;
 };
 
-const Modal: React.FC<ModalType> = ({ closeModal, setIsLoggedIn }) => {
+const Modal: React.FC<ModalType> = ({ closeModal }) => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
@@ -29,7 +28,7 @@ const Modal: React.FC<ModalType> = ({ closeModal, setIsLoggedIn }) => {
 			const user = userCredential.user;
 			console.log("User logged in");
 			setError(null); // Reset error state on successful login
-			setIsLoggedIn();
+
 			closeModal();
 		} catch (error) {
 			// Handle errors
