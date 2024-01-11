@@ -1,0 +1,50 @@
+.header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	background-color: transparent;
+	background: transparent;
+	color: #e3b285;
+	height: 144px;
+	padding: 0.5rem;
+	position: relative;
+	width: 100%;
+	font-size: 20px;
+	/* flex: 1; */
+}
+.logo {
+	cursor: pointer;
+	width: 200px;
+	height: 100px;
+	max-width: 250px;
+	background-color: transparent;
+	padding: 15px;
+}
+.menu {
+	display: flex;
+	flex-direction: row;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	background-color: transparent;
+	z-index: 99;
+	justify-content: space-between;
+	gap: 2rem;
+	margin-right: 3rem;
+}
+.menuToggle {
+	display: none;
+}
+.loginBtn {
+	color: #0bd08e !important;
+}
+.loginBtn:hover {
+	color: #068057 !important;
+}
+.logoutBtn {
+	color: #da4813 !important;
+}
+.logoutBtn:hover {
+	color: #882d0c !important;
+}

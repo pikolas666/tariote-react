@@ -1,0 +1,25 @@
+.social {
+	display: flex;
+	height: 0px;
+	justify-content: center;
+	align-content: center;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: transparent;
+	margin-bottom: 10px;
+	flex-grow: 0;
+	flex-shrink: 0;
+	z-index: 2;
+	margin-bottom: 50px;
+}
+.social img {
+	height: 30px;
+	width: 30px;
+	align-items: center;
+	display: inline-block;
+	margin-left: auto;
+	margin-right: auto;
+	margin: 5px;
+	background-color: transparent;
+}
