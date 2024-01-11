@@ -24,7 +24,7 @@ const Header = () => {
 		<header className={styles.header}>
 			{isShowModal && (
 				<Modal
-					onClick={() => {
+					hideModal={() => {
 						setIsSHowModal(false);
 					}}
 				></Modal>

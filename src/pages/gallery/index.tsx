@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import styles from "./gallery.module.css";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
-import firebaseApp from "../../../firebaseConfig";
+import { FirebaseApp } from "../../../firebaseConfig";
 import Image from "next/image";
 
 const Gallery = () => {
@@ -13,7 +13,7 @@ const Gallery = () => {
 
 	useEffect(() => {
 		const initializeFirebaseApp = async () => {
-			const storage = getStorage(firebaseApp);
+			const storage = getStorage(FirebaseApp);
 
 			const storageRef = ref(storage);
 

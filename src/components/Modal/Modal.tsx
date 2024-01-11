@@ -1,38 +1,51 @@
 import React, { useState } from "react";
 import styles from "./Modal.module.css";
-import firebase from "firebase/app";
-import "firebase/auth";
-import firebaseApp from "../../../firebaseConfig";
+import {
+	getAuth,
+	signInWithEmailAndPassword,
+	UserCredential,
+} from "firebase/auth";
 
 type ModalType = {
-	onClick: () => void;
+	hideModal: () => void;
 };
 
-const Modal: React.FC<ModalType> = ({ onClick }) => {
+const Modal: React.FC<ModalType> = ({ hideModal }) => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
 
 	const handleLogin = async () => {
 		try {
-			const userCredential = await firebase
-				.auth()
-				.signInWithEmailAndPassword(email, password);
+			const auth = getAuth();
+			const userCredential: UserCredential = await signInWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+
 			// Handle successful login
 			const user = userCredential.user;
 			console.log("User logged in:", user);
 			setError(null); // Reset error state on successful login
+			hideModal();
 		} catch (error) {
 			// Handle errors
-			console.error("Login error:", error.message);
-			setError(error.message);
+			console.error("Login error:", error);
+
+			// Check if the error is a string or an instance of an error
+			if (typeof error === "string") {
+				setError(error);
+			} else {
+				setError("An unexpected error occurred.");
+			}
 		}
 	};
 
 	return (
 		<div className={styles.modalWrapper}>
 			<div className={styles.modal}>
-				<div className={styles.closeBtn} onClick={onClick}>
+				<div className={styles.closeBtn} onClick={hideModal}>
 					X
 				</div>
 				<h3>Login</h3>

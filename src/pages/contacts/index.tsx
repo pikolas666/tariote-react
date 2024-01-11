@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getDatabase, ref as dbRef, get } from "firebase/database";
 import styles from "./contacts.module.css";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
-import firebaseApp from "../../../firebaseConfig";
-
+import { FirebaseApp } from "../../../firebaseConfig";
 const Contacts = () => {
 	const [contactsText, setContactsText] = useState("");
 
@@ -12,7 +11,7 @@ const Contacts = () => {
 	}, []);
 
 	async function showAboutMeText() {
-		const database = getDatabase(firebaseApp);
+		const database = getDatabase(FirebaseApp);
 		const firebaseRef = dbRef(database, "contacts");
 
 		try {

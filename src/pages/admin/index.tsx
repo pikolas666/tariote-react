@@ -24,11 +24,11 @@ const Admin = () => {
 		// Update contacts text in the database
 	};
 
-	const handleFileUpload = (folder) => {
+	const handleFileUpload = (folder: any) => {
 		// Handle file upload logic for the specified folder
 	};
 
-	const listAllPhotos = (folder) => {
+	const listAllPhotos = (folder: any) => {
 		// Fetch and list all photos in the specified folder
 	};
 
@@ -47,8 +47,11 @@ const Admin = () => {
 							value={aboutMeText}
 							onChange={(e) => setAboutMeText(e.target.value)}
 						/>
+
 						<button type="submit" className={styles.applybutton}>
+							{/* eslint-disable */}
 							Uzkrauti "apie mane" teksta
+							{/* eslint-enable */}
 						</button>
 						<button onClick={showAboutMeText} className={styles.applybutton}>
 							Keisti teksta
@@ -65,7 +68,9 @@ const Admin = () => {
 							onChange={(e) => setContactsText(e.target.value)}
 						/>
 						<button type="submit" className={styles.applybutton}>
+							{/* eslint-disable */}
 							Uzkrauti "kontaktai" teksta
+							{/* eslint-enable */}
 						</button>
 						<button onClick={showContactsText} className={styles.applybutton}>
 							Keisti teksta

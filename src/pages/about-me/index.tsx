@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getDatabase, ref as dbRef, get } from "firebase/database";
 import styles from "./about-me.module.css";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
-import firebaseApp from "../../../firebaseConfig";
+import { FirebaseApp } from "../../../firebaseConfig";
 
 const About = () => {
 	const [aboutMeText, setAboutMeText] = useState("");
@@ -12,7 +12,7 @@ const About = () => {
 	}, []);
 
 	async function showAboutMeText() {
-		const database = getDatabase(firebaseApp);
+		const database = getDatabase(FirebaseApp);
 		const firebaseRef = dbRef(database, "aboutme");
 
 		try {
