@@ -27,9 +27,9 @@ const Admin = () => {
 
 			const snapshot = await get(firebaseRef);
 			const firebaseAboutMeText = snapshot.val();
-			console.log(firebaseAboutMeText);
+			console.log(firebaseAboutMeText[0]);
 
-			setDatabaseValue(firebaseAboutMeText);
+			setDatabaseValue(firebaseAboutMeText[0]);
 		} catch (error) {
 			console.error("Error fetching aboutMe text:", error);
 		}
@@ -49,17 +49,9 @@ const Admin = () => {
 		}
 	};
 
-	const updateContactsText = async (e: any) => {
+	const updateContactsText = (e: any) => {
 		e.preventDefault();
-		try {
-			const database = getDatabase(FirebaseApp);
-			const firebaseRef = dbRef(database, "contacts");
-
-			await set(firebaseRef, contactsText);
-			console.log("contacts text updated successfully.");
-		} catch (error) {
-			console.error("Error updating About Me text:", error);
-		}
+		// Update contacts text in the database or perform other actions
 	};
 
 	const showContactsText = async () => {
@@ -69,9 +61,9 @@ const Admin = () => {
 
 			const snapshot = await get(firebaseRef);
 			const firebaseContactsText = snapshot.val();
-			console.log(firebaseContactsText);
+			console.log(firebaseContactsText[0]);
 
-			setDatabaseContactsValue(firebaseContactsText);
+			setDatabaseContactsValue(firebaseContactsText[0]);
 		} catch (error) {
 			console.error("Error fetching contacts text:", error);
 		}
@@ -112,10 +104,14 @@ const Admin = () => {
 									? JSON.stringify(databaseContactsValue)
 									: ""
 							}
-							onEditorChange={(value: any) => setContactsText(value)}
+							onEditorChange={(value: any) => setAboutMeText(value)}
 						/>
 						<form onSubmit={updateContactsText}>
 							showContactsText
+							<textarea
+								value={contactsText}
+								onChange={(e) => setContactsText(e.target.value)}
+							/>
 							<button type="submit" className={styles.applybutton}>
 								{/* eslint-disable */}
 								Keisti "kontaktai" teksta
