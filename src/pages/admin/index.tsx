@@ -1,43 +1,58 @@
+// Import necessary modules
 import React, { useEffect, useState } from "react";
+import { getDatabase, ref as dbRef, get, set } from "firebase/database";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
 import styles from "./admin.module.css";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useUser } from "../../pages/_app";
+import TinyMCEModule from "../../components/TinyMCE/TinyMCE";
+import { FirebaseApp } from "../../../firebaseConfig";
 
 const Admin = () => {
-	const auth = getAuth();
-
+	const [databaseValue, setDatabaseValue] = useState("");
 	const [aboutMeText, setAboutMeText] = useState("");
 	const [contactsText, setContactsText] = useState("");
-
 	const user = useUser();
 
-	// Now, 'user' will be either the user object if logged in or null if logged out
+	useEffect(() => {
+		showAboutMeText();
+	}, []);
 
-	const showAboutMeText = () => {
-		// Fetch aboutMe text and update the state
+	const showAboutMeText = async () => {
+		try {
+			const database = getDatabase(FirebaseApp);
+			const firebaseRef = dbRef(database, "aboutme");
+
+			const snapshot = await get(firebaseRef);
+			const firebaseAboutMeText = snapshot.val();
+			console.log(firebaseAboutMeText[0]);
+
+			setDatabaseValue(firebaseAboutMeText);
+		} catch (error) {
+			console.error("Error fetching aboutMe text:", error);
+		}
 	};
 
-	const updateAboutMeText = (e: any) => {
+	const updateAboutMeText = async (e: any) => {
 		e.preventDefault();
-		// Update aboutMe text in the database
-	};
 
-	const showContactsText = () => {
-		// Fetch contacts text and update the state
+		try {
+			const database = getDatabase(FirebaseApp);
+			const firebaseRef = dbRef(database, "aboutme");
+
+			await set(firebaseRef, aboutMeText);
+			console.log("About Me text updated successfully.");
+		} catch (error) {
+			console.error("Error updating About Me text:", error);
+		}
 	};
 
 	const updateContactsText = (e: any) => {
 		e.preventDefault();
-		// Update contacts text in the database
+		// Update contacts text in the database or perform other actions
 	};
 
-	const handleFileUpload = (folder: any) => {
-		// Handle file upload logic for the specified folder
-	};
-
-	const listAllPhotos = (folder: any) => {
-		// Fetch and list all photos in the specified folder
+	const showContactsText = () => {
+		// Fetch contacts text and update the state or perform other actions
 	};
 
 	const deleteAllPhotos = () => {
@@ -51,19 +66,17 @@ const Admin = () => {
 					{/* About Me */}
 					<div className={styles.tinyContacts}>
 						<h2 className={styles.titleh2}>Apie mane</h2>
+						<TinyMCEModule
+							initialValue={
+								databaseValue !== undefined ? JSON.stringify(databaseValue) : ""
+							}
+							onEditorChange={(value: any) => setAboutMeText(value)}
+						/>
 						<form onSubmit={updateAboutMeText}>
-							<textarea
-								value={aboutMeText}
-								onChange={(e) => setAboutMeText(e.target.value)}
-							/>
-
 							<button type="submit" className={styles.applybutton}>
 								{/* eslint-disable */}
 								Uzkrauti "apie mane" teksta
 								{/* eslint-enable */}
-							</button>
-							<button onClick={showAboutMeText} className={styles.applybutton}>
-								Keisti teksta
 							</button>
 						</form>
 					</div>
@@ -105,6 +118,15 @@ const Admin = () => {
 			</div>
 		</PageTemplate>
 	);
+};
+
+const parseJSON = (jsonString: string) => {
+	try {
+		return JSON.parse(jsonString);
+	} catch (error) {
+		console.error("Error parsing JSON:", error);
+		return null;
+	}
 };
 
 export default Admin;

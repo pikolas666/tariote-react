@@ -17,9 +17,9 @@ const About = () => {
 
 		try {
 			const snapshot = await get(firebaseRef);
-			const loginInfo = snapshot.val();
+			const firebaseAboutMeText = snapshot.val();
 
-			setAboutMeText(loginInfo);
+			setAboutMeText(firebaseAboutMeText);
 		} catch (error) {
 			console.error("Error fetching aboutMe text:", error);
 		}

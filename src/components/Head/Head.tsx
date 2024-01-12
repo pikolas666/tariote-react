@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import Script from "next/script";
 
 const CustomHead = () => {
 	const router = useRouter();
@@ -25,14 +25,11 @@ const CustomHead = () => {
 	}, [router.pathname, router.events]);
 
 	return (
-		<Head>
+		<>
 			<link rel="icon" href="/flavicon.png" />
 			<title>Tariote Photography</title>
-			<script
-				src="//code.tidio.co/jxloh9mwayhrsrumsqwksfuurzju8h0x.js"
-				async
-			></script>
-		</Head>
+			<Script src="//code.tidio.co/jxloh9mwayhrsrumsqwksfuurzju8h0x.js" async />
+		</>
 	);
 };
 
