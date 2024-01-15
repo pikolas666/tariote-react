@@ -15,8 +15,6 @@ const Gallery = () => {
 		const initializeFirebaseApp = async () => {
 			const storage = getStorage(FirebaseApp);
 
-			const storageRef = ref(storage);
-
 			const listAllItems = async (gallery: any) => {
 				try {
 					const listRef = ref(storage, gallery);
