@@ -26,7 +26,7 @@ const CustomHead = () => {
 
 	return (
 		<>
-			<link rel="icon" href="/flavicon.png" />
+			<link rel="icon" href="/favicon.ico" />
 			<title>Tariote Photography</title>
 			<Script src="//code.tidio.co/jxloh9mwayhrsrumsqwksfuurzju8h0x.js" async />
 		</>

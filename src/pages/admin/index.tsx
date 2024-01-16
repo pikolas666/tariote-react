@@ -13,6 +13,7 @@ import {
 	listAll,
 	getDownloadURL,
 } from "firebase/storage";
+import GalleryFolder from "../../components/GalleryFolder/GalleryFolder";
 
 const Admin = () => {
 	const [databaseValue, setDatabaseValue] = useState("");
@@ -22,15 +23,29 @@ const Admin = () => {
 	const [contactsText, setContactsText] = useState("");
 
 	const [selectedFiles, setSelectedFiles] = useState([] as File[]);
+	const [galleryfolder, setGalleryFolder] = useState("");
+
+	const [message, setMessage] = useState({ text: "", type: "" });
 
 	const storage = getStorage(FirebaseApp);
 
 	const user = useUser();
+	useEffect(() => {
+		if (selectedFiles.length > 0) {
+			// Delay the upload if needed
+			const delayUpload = async () => {
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+				uploadImage(galleryfolder); // Replace "gamta" with the appropriate gallery
+			};
+
+			delayUpload();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedFiles]);
 
 	useEffect(() => {
 		showAboutMeText();
 		showContactsText();
-		console.log("ALL Selected files:", selectedFiles);
 	}, [selectedFiles]);
 
 	const showAboutMeText = async () => {
@@ -87,23 +102,18 @@ const Admin = () => {
 			console.error("Error fetching contacts text:", error);
 		}
 	};
-	const handleFileInputChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
-		console.log("hit");
 
+	const handleFileInputChange = (
+		event: React.ChangeEvent<HTMLInputElement>,
+		gallery: string
+	) => {
 		// Access the selected files from the event
 		const files = event.target.files;
 
 		if (files) {
-			// Explicitly specify the type of newSelectedFiles
 			const newSelectedFiles: File[] = Array.from([...selectedFiles, ...files]);
-
-			// Update the state with the new array
 			setSelectedFiles(newSelectedFiles);
-
-			// Your additional logic for handling the selected files goes here
-			console.log("Selected files:", newSelectedFiles);
+			setGalleryFolder(gallery);
 		} else {
 			console.log("no files found");
 		}
@@ -119,16 +129,25 @@ const Admin = () => {
 		try {
 			await Promise.all(
 				selectedFiles.map(async (file) => {
+					console.log(`Processing file: ${file.name}`);
+
 					const storageRef = ref(storage, gallery + "/" + file.name);
-					await uploadBytes(storageRef, file);
-					console.log(`${file.name} uploaded successfully`);
+
+					try {
+						await uploadBytes(storageRef, file);
+						console.log(`${file.name} uploaded successfully`);
+					} catch (uploadError) {
+						console.error(`Error uploading ${file.name}:`, uploadError);
+					}
 				})
 			);
 
-			alert(`All files uploaded successfully`);
+			setMessage({ text: "Files uploaded successfully", type: "success" });
 		} catch (error) {
-			console.error(`Failed to upload files`, error);
-			alert(`Failed to upload files`);
+			console.error(`Error during file upload:`, error);
+			setMessage({ text: "Failed to upload files", type: "error" });
+		} finally {
+			setSelectedFiles([]);
 		}
 	};
 
@@ -186,91 +205,33 @@ const Admin = () => {
 							<div className={styles.adminGallery}>
 								<h2 className={styles.titleh2}>Galerija</h2>
 								<div className={styles.galleryFoldercontainer}>
-									<div id="adminGamta" className={styles.adminGalleryFolder}>
-										{" "}
-										{/* eslint-disable */}"gamta/"{/* eslint-enable */}
-										<button
-											className={styles.uploadPlus}
-											onClick={() => {
-												triggerFileInput("fileInput");
-											}}
-										>
-											<input
-												type="file"
-												id="fileInput"
-												className={styles.inputFile}
-												onChange={handleFileInputChange}
-												accept="image/png, image/jpeg, image.jpg"
-												multiple
-											/>
-											+
-										</button>
-										<button
-											onClick={() => {
-												uploadImage("gamta");
-											}}
-											className={styles.uploadButton}
-										>
-											upload
-										</button>
-									</div>
-									<div id="adminGamta" className={styles.adminGalleryFolder}>
-										{" "}
-										{/* eslint-disable */}"seimos/"{/* eslint-enable */}
-										<button
-											className={styles.uploadPlus}
-											onClick={() => {
-												triggerFileInput("fileInput");
-											}}
-										>
-											<input
-												type="file"
-												id="fileInput"
-												className={styles.inputFile}
-												onChange={handleFileInputChange}
-												accept="image/png, image/jpeg, image.jpg"
-												multiple
-											/>
-											+
-										</button>
-										<button
-											onClick={() => {
-												uploadImage("seimos");
-											}}
-											className={styles.uploadButton}
-										>
-											upload
-										</button>
-									</div>
-									<div id="adminGamta" className={styles.adminGalleryFolder}>
-										{" "}
-										{/* eslint-disable */}"gamta/"{/* eslint-enable */}
-										<button
-											className={styles.uploadPlus}
-											onClick={() => {
-												triggerFileInput("fileInput");
-											}}
-										>
-											<input
-												type="file"
-												id="fileInput"
-												className={styles.inputFile}
-												onChange={handleFileInputChange}
-												accept="image/png, image/jpeg, image.jpg"
-												multiple
-											/>
-											+
-										</button>
-										<button
-											onClick={() => {
-												uploadImage("sventes");
-											}}
-											className={styles.uploadButton}
-										>
-											upload
-										</button>
-									</div>
+									<GalleryFolder
+										id="adminGamta"
+										galleryName="gamta"
+										onFileInputChange={handleFileInputChange}
+										onUploadClick={uploadImage}
+									/>
+									<GalleryFolder
+										id="adminSeimos"
+										galleryName="seimos"
+										onFileInputChange={handleFileInputChange}
+										onUploadClick={uploadImage}
+									/>
+									<GalleryFolder
+										id="adminSventes"
+										galleryName="sventes"
+										onFileInputChange={handleFileInputChange}
+										onUploadClick={uploadImage}
+									/>
 								</div>
+							</div>
+							<div
+								className={styles.message}
+								style={{
+									color: message.type === "error" ? "red" : "rgb(11, 208, 142)",
+								}}
+							>
+								{message.text}
 							</div>
 							<div className={styles.galleryPhotosButtonContainer}>
 								{/* Gallery photo buttons */}
@@ -286,14 +247,5 @@ const Admin = () => {
 		</PageTemplate>
 	);
 };
-
-// const parseJSON = (jsonString: string) => {
-// 	try {
-// 		return JSON.parse(jsonString);
-// 	} catch (error) {
-// 		console.error("Error parsing JSON:", error);
-// 		return null;
-// 	}
-// };
 
 export default Admin;

@@ -19,7 +19,7 @@ type PageTemplateType = {
 
 const PageTemplate: React.FC<PageTemplateType> = ({ children }) => {
 	// State for login status and modal visibility
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 	const [isShowModal, setIsShowModal] = useState(false);
 
 	// Function to open the modal
@@ -31,16 +31,13 @@ const PageTemplate: React.FC<PageTemplateType> = ({ children }) => {
 	const closeModal = () => {
 		setIsShowModal(false);
 	};
-	const handleLogout = () => {
-		setIsLoggedIn(false);
-	};
 
 	return (
 		<>
 			<CustomHead />
 			<div className={`${styles.wrapper} ${roboto.className}`}>
 				{/* Pass isLoggedIn and openModal as props to Header */}
-				<Header handleLogout={handleLogout} openModal={openModal} />
+				<Header openModal={openModal} />
 				{/* Pass closeModal as a prop to Modal */}
 				{isShowModal && <Modal closeModal={closeModal} />}
 				<div className={styles.main}>{children}</div>

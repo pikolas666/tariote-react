@@ -9,10 +9,9 @@ import { useUser } from "../../pages/_app";
 
 type HeaderProps = {
 	openModal: () => void;
-	handleLogout: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ handleLogout, openModal }) => {
+const Header: React.FC<HeaderProps> = ({ openModal }) => {
 	const router = useRouter();
 	const auth = getAuth();
 	const [isAdminPanel, setIsAdminPanel] = useState(false);
@@ -23,7 +22,6 @@ const Header: React.FC<HeaderProps> = ({ handleLogout, openModal }) => {
 	}, [router.pathname, auth]);
 
 	const logOut = () => {
-		handleLogout();
 		auth.signOut();
 		console.log("user logged out");
 	};
