@@ -1,0 +1,59 @@
+.adminGalleryFolder {
+	justify-content: center;
+	margin: auto;
+	position: relative;
+	top: 10px;
+	bottom: 20px;
+	font-size: 2rem;
+	color: #9e9e9e;
+	height: 30%;
+	border: #9e9e9e solid;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px;
+}
+
+.inputFile {
+	display: none;
+}
+.uploadPlus {
+	height: 50px;
+	width: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	margin-bottom: 10px;
+	font-size: 50px;
+	background: linear-gradient(45deg, #ddc2a8, #e3b285);
+	cursor: pointer;
+	border-radius: 50%;
+	padding: 30px;
+	font-weight: 600;
+	margin-top: 10px;
+	border: none;
+}
+.uploadPlus:hover {
+	background: linear-gradient(45deg, #d99250, #7e634a);
+}
+
+.uploadButton {
+	margin-top: 10px;
+	cursor: pointer;
+	background-color: #e3b285;
+	padding: 5px;
+	color: antiquewhite;
+	border: none;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.uploadButton:hover {
+	background: linear-gradient(45deg, #d99250, #7e634a);
+}
+@media only screen and (max-width: 600px) {
+	.adminGalleryFolder {
+		font-size: 1rem;
+	}
+}

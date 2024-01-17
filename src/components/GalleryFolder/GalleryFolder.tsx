@@ -9,14 +9,12 @@ type GalleryFolderProps = {
 		event: React.ChangeEvent<HTMLInputElement>,
 		gallery: string
 	) => void;
-	onUploadClick: (gallery: string) => void;
 };
 
 const GalleryFolder: React.FC<GalleryFolderProps> = ({
 	id,
 	galleryName,
 	onFileInputChange,
-	onUploadClick,
 }) => {
 	return (
 		<div className={styles.adminGalleryFolder}>
@@ -39,12 +37,6 @@ const GalleryFolder: React.FC<GalleryFolderProps> = ({
 					multiple
 				/>
 				+
-			</button>
-			<button
-				onClick={() => onUploadClick(galleryName)}
-				className={styles.uploadButton}
-			>
-				upload
 			</button>
 		</div>
 	);

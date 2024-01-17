@@ -12,6 +12,7 @@ import {
 	uploadBytes,
 	listAll,
 	getDownloadURL,
+	deleteObject,
 } from "firebase/storage";
 import GalleryFolder from "../../components/GalleryFolder/GalleryFolder";
 
@@ -26,8 +27,14 @@ const Admin = () => {
 	const [galleryfolder, setGalleryFolder] = useState("");
 
 	const [message, setMessage] = useState({ text: "", type: "" });
+	const [isShowMessage, setIsShowMessage] = useState(false);
 
 	const storage = getStorage(FirebaseApp);
+
+	const [currentFolder, setCurrentFolder] = useState("");
+	const [galleryItems, setGalleryItems] = useState<string[]>([]);
+
+	let deleteList: Array<any> = [];
 
 	const user = useUser();
 	useEffect(() => {
@@ -119,11 +126,11 @@ const Admin = () => {
 		}
 	};
 
-	const triggerFileInput = (name: string) => {
-		// Programmatically trigger a click event on the file input
-		const input = document.getElementById(name) as HTMLInputElement;
-		input.click();
-	};
+	// const triggerFileInput = (name: string) => {
+	// 	// Programmatically trigger a click event on the file input
+	// 	const input = document.getElementById(name) as HTMLInputElement;
+	// 	input.click();
+	// };
 
 	const uploadImage = async (gallery: string) => {
 		try {
@@ -149,10 +156,75 @@ const Admin = () => {
 		} finally {
 			setSelectedFiles([]);
 		}
+		setIsShowMessage(true);
+	};
+	const listAllItems = async (gallery: any) => {
+		try {
+			const listRef = ref(storage, gallery);
+			const res = await listAll(listRef);
+
+			setGalleryItems([]);
+			setCurrentFolder(gallery);
+
+			const sortedItems = res.items.sort((a: any, b: any) =>
+				a._location.path_.localeCompare(b._location.path_)
+			);
+
+			const downloadPromises = sortedItems.map((itemRef) =>
+				getDownloadURL(itemRef)
+			);
+
+			const urls = await Promise.all(downloadPromises);
+
+			setGalleryItems(urls);
+		} catch (error) {
+			console.error("Error getting download URLs:", error);
+		}
 	};
 
-	const deleteAllPhotos = () => {
-		// Handle logic to delete all photos
+	function addToDeleteList() {
+		let checkboxes = document.querySelectorAll(
+			"input[type='checkbox']:checked"
+		);
+		for (let i = 0; i < checkboxes.length; i++) {
+			deleteList.push(checkboxes[i].id);
+		}
+		console.log("new " + deleteList);
+	}
+
+	function cleanDeleteList() {
+		deleteList = [];
+	}
+
+	const deleteAllPhotos = async () => {
+		addToDeleteList();
+
+		for (const item of deleteList) {
+			console.log(item);
+
+			const desertRef = ref(storage, item);
+
+			try {
+				await deleteObject(desertRef);
+				console.log(`Successfully deleted: ${item}`);
+			} catch (error) {
+				console.error("Uh-oh, an error occurred:", error);
+				setMessage({
+					text: `Failed to delete files`,
+					type: "error",
+				});
+			}
+		}
+		setMessage({
+			text: `Files deleted successfully`,
+			type: "success",
+		});
+
+		cleanDeleteList();
+
+		// added refresh
+		listAllItems(currentFolder);
+		setIsShowMessage(true);
 	};
 
 	return (
@@ -209,37 +281,80 @@ const Admin = () => {
 										id="adminGamta"
 										galleryName="gamta"
 										onFileInputChange={handleFileInputChange}
-										onUploadClick={uploadImage}
 									/>
 									<GalleryFolder
 										id="adminSeimos"
 										galleryName="seimos"
 										onFileInputChange={handleFileInputChange}
-										onUploadClick={uploadImage}
 									/>
 									<GalleryFolder
 										id="adminSventes"
 										galleryName="sventes"
 										onFileInputChange={handleFileInputChange}
-										onUploadClick={uploadImage}
 									/>
 								</div>
 							</div>
-							<div
-								className={styles.message}
-								style={{
-									color: message.type === "error" ? "red" : "rgb(11, 208, 142)",
+							{isShowMessage && (
+								<div
+									className={styles.message}
+									style={{
+										color:
+											message.type === "error" ? "red" : "rgb(11, 208, 142)",
+									}}
+								>
+									{message.text}
+									<button
+										className={styles.closeBtn}
+										onClick={() => {
+											setIsShowMessage(false);
+										}}
+									>
+										OK
+									</button>
+								</div>
+							)}
+						</div>
+						<div className={styles.galleryPhotosButtonContainer}>
+							<button
+								id="adminGallerybutton"
+								onClick={() => {
+									listAllItems("gamta/");
 								}}
+								className={styles.galleryPhotosButton}
 							>
-								{message.text}
-							</div>
-							<div className={styles.galleryPhotosButtonContainer}>
-								{/* Gallery photo buttons */}
-							</div>
-							<button onClick={deleteAllPhotos} className={styles.deletePhotos}>
-								Delete Photos
+								gamta
 							</button>
-							<div className={styles.adminGalleryphotos}></div>
+							<button
+								id="adminGallerybutton"
+								onClick={() => {
+									listAllItems("seimos/");
+								}}
+								className={styles.galleryPhotosButton}
+							>
+								seimos
+							</button>
+							<button
+								id="adminGallerybutton"
+								onClick={() => {
+									listAllItems("sventes/");
+								}}
+								className={styles.galleryPhotosButton}
+							>
+								sventes
+							</button>
+						</div>
+						<button onClick={deleteAllPhotos} className={styles.deletePhotos}>
+							Delete Photos
+						</button>
+						<div id="adminGalleryphotos" className={styles.adminGalleryphotos}>
+							{galleryItems.map((url) => (
+								<label key={url} htmlFor={`checkbox_${url}`}>
+									<input type="checkbox" id={url} className={styles.myCheck} />
+
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img src={url} alt={`Gallery Item`} />
+								</label>
+							))}
 						</div>
 					</div>
 				</>

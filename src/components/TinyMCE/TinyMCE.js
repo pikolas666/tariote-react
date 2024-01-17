@@ -9,9 +9,10 @@ const Editor = dynamic(
 );
 
 const TinyMCEModule = ({ initialValue, onEditorChange }) => {
+	const Tidio = process.env.NEXT_PUBLIC_FIREBASE_TIDIO_API_KEY;
 	return (
 		<Editor
-			apiKey="xaqzdvc02dpqgqxhpt2a4zrbxj1k2g93psosfw3elsquvnx6"
+			apiKey={Tidio}
 			init={{
 				// Your initialization options
 				selector: "#myTextarea",

@@ -134,3 +134,20 @@
 	border-radius: 7px;
 	box-shadow: rgba(99, 99, 99, 0.8) 0px 5px 8px 0px;
 }
+@media (max-width: 600px) {
+	.gallery {
+		width: auto;
+
+		display: flex;
+		flex-direction: column;
+	}
+	.img-fluid {
+		object-fit: cover;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	.gallery img {
+		width: 100%;
+	}
+}
