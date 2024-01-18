@@ -6,7 +6,6 @@ import logo from "../../assets/tariotelogo3.png";
 import { useRouter } from "next/router";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { useUser } from "../../pages/_app";
-import BurgerButton from "../BurgerButton/BurgerButton";
 
 type HeaderProps = {
 	openModal: () => void;
@@ -15,16 +14,8 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ openModal }) => {
 	const router = useRouter();
 	const auth = getAuth();
-
-	const user = useUser();
-
 	const [isAdminPanel, setIsAdminPanel] = useState(false);
-	const [showMobileNav, setShowMobileNav] = useState(false);
-
-	const toggleMobileNav = () => {
-		console.log("hit");
-		setShowMobileNav(!showMobileNav);
-	};
+	const user = useUser();
 
 	useEffect(() => {
 		setIsAdminPanel(router.pathname === "/admin");
@@ -61,10 +52,11 @@ const Header: React.FC<HeaderProps> = ({ openModal }) => {
 					!
 				</p>
 			)}
+			<input className={styles.menuToggle} type="checkbox" />
 
-			<BurgerButton toggleMobileNav={toggleMobileNav} />
+			<div className={styles.menuButton}></div>
 
-			<ul className={styles.nav}>
+			<ul className={styles.menu}>
 				<li>
 					<Link href="/">Pagrindinis</Link>
 				</li>
@@ -99,43 +91,6 @@ const Header: React.FC<HeaderProps> = ({ openModal }) => {
 					)
 				)}
 			</ul>
-			{showMobileNav && (
-				<ul className={styles.mobileNav}>
-					<li>
-						<Link href="/">Pagrindinis</Link>
-					</li>
-					<li>
-						<Link href="/gallery">Galerija</Link>
-					</li>
-					<li>
-						<Link href="/about-me">Apie mane</Link>
-					</li>
-					<li>
-						<Link href="/contacts">Kontaktai</Link>
-					</li>
-					{isAdminPanel && !user ? (
-						<li>
-							<Link
-								className={styles.loginBtn}
-								href="#"
-								onClick={() => {
-									openModal();
-								}}
-							>
-								Login
-							</Link>
-						</li>
-					) : (
-						user && (
-							<li>
-								<Link onClick={logOut} className={styles.logoutBtn} href="#">
-									Logout
-								</Link>
-							</li>
-						)
-					)}
-				</ul>
-			)}
 		</header>
 	);
 };

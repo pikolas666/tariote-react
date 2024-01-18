@@ -1,0 +1,31 @@
+.burgerContainer {
+	cursor: pointer;
+}
+
+.burger {
+	display: flex;
+	flex-direction: column;
+	width: 30px;
+	height: 20px;
+	justify-content: space-between;
+	margin-right: 2rem;
+}
+
+.bar {
+	width: 100%;
+	height: 4px;
+	background-color: #e3b285;
+	transition: transform 0.3s, opacity 0.3s;
+}
+
+.burgerContainer.open .bar:nth-child(1) {
+	transform: translateY(8px) rotate(-45deg);
+}
+
+.burgerContainer.open .bar:nth-child(2) {
+	opacity: 0;
+}
+
+.burgerContainer.open .bar:nth-child(3) {
+	transform: translateY(-8px) rotate(45deg);
+}

@@ -6,12 +6,10 @@
 	background-color: transparent;
 	background: transparent;
 	color: #e3b285;
-	height: 144px;
+	height: 110px;
 	padding: 0.5rem;
 	position: relative;
 	width: 100%;
-	font-size: 20px;
-	/* flex: 1; */
 }
 .logo {
 	cursor: pointer;
@@ -27,7 +25,7 @@
 	flex: 1;
 	justify-content: center;
 }
-.menu {
+.nav {
 	display: flex;
 	flex-direction: row;
 	list-style-type: none;
@@ -39,9 +37,25 @@
 	gap: 2rem;
 	margin-right: 3rem;
 }
-.menuToggle {
-	display: none;
+.nav a:link {
+	all: unset;
+	color: #e3b285;
+	text-decoration: none;
+	background-color: transparent;
+	font-size: 30px;
 }
+.nav a:visited {
+	text-decoration: none;
+	color: #e3b285;
+}
+.nav a:hover {
+	color: rgb(177, 131, 46);
+}
+.nav a:active {
+	text-decoration: none;
+	color: rgb(177, 131, 46);
+}
+
 .loginBtn {
 	color: #0bd08e !important;
 }
@@ -54,14 +68,17 @@
 .logoutBtn:hover {
 	color: #882d0c !important;
 }
+.mobileNav {
+	display: none;
+}
 
 @media (max-width: 600px) {
 	.header a:link {
 		color: #e3b285;
 		text-decoration: none;
 		background-color: transparent;
-		font-size: 20px;
 	}
+
 	.welcome {
 		position: absolute;
 		left: 3px;
@@ -70,17 +87,16 @@
 	}
 }
 @media (max-width: 992px) {
-	.menu-button-container {
-		margin-right: 10px;
-		display: flex;
-		background-color: transparent;
-		-webkit-tap-highlight-color: transparent;
+	.nav {
+		display: none;
+		font-size: 16px;
 	}
 
-	.menu {
+	.mobileNav {
+		display: flex;
 		position: absolute;
-		top: 20px;
-		margin-top: 120px;
+		top: 125px;
+		padding: 0;
 		left: 0;
 		flex-direction: column;
 		width: 100%;
@@ -88,21 +104,21 @@
 		align-items: center;
 		-webkit-tap-highlight-color: transparent;
 		background-color: rgb(248, 246, 246, 0.285);
+		z-index: 10;
 	}
-	#menu-toggle ~ .menu li {
-		height: 0;
-		margin: 0;
-		padding: 0;
-		border: 0;
-		transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+	.mobileNav a {
+		all: unset;
+		cursor: pointer;
 	}
-	#menu-toggle:checked ~ .menu li {
-		border: 1px solid #b4adad;
-		height: 2.5em;
-		padding: 0.5em;
-		transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+	.mobileNav a:visited {
+		text-decoration: none;
+		color: #e3b285;
 	}
-	.menu > li {
+	.mobileNav a:hover {
+		color: rgb(177, 131, 46);
+	}
+
+	.mobileNav > li {
 		position: relative;
 		display: flex;
 		justify-content: center;
@@ -112,7 +128,12 @@
 		color: #e3b285;
 		background-color: rgba(248, 246, 246, 1);
 	}
-	.menu > li:not(:last-child) {
+	.mobileNav > li:not(:last-child) {
 		border-bottom: 1px solid #444;
+	}
+}
+@media (max-width: 1200px) {
+	.nav a {
+		font-size: 20px !important;
 	}
 }

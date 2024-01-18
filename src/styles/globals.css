@@ -11,20 +11,3 @@ body {
 	z-index: 0;
 	overflow-x: hidden;
 }
-a:link {
-	color: #e3b285;
-	text-decoration: none;
-	background-color: transparent;
-	font-size: 30px;
-}
-a:visited {
-	text-decoration: none;
-	color: #e3b285;
-}
-a:hover {
-	color: rgb(177, 131, 46);
-}
-a:active {
-	text-decoration: none;
-	color: rgb(177, 131, 46);
-}
