@@ -1,4 +1,3 @@
-// GalleryFolder.tsx
 import React from "react";
 import styles from "./GalleryFolder.module.css";
 

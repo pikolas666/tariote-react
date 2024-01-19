@@ -1,10 +1,9 @@
-// Import necessary modules
 import React, { ReactNode, useState } from "react";
 import Header from "../Header/Header";
 import CustomHead from "../Head/Head";
 import styles from "./styles.module.css";
 import Footer from "../Footer/Footer";
-import Modal from "../Modal/Modal"; // Import the Modal component
+import Modal from "../Modal/Modal";
 
 import { Roboto } from "next/font/google";
 
@@ -18,16 +17,12 @@ type PageTemplateType = {
 };
 
 const PageTemplate: React.FC<PageTemplateType> = ({ children }) => {
-	// State for login status and modal visibility
-
 	const [isShowModal, setIsShowModal] = useState(false);
 
-	// Function to open the modal
 	const openModal = () => {
 		setIsShowModal(true);
 	};
 
-	// Function to close the modal
 	const closeModal = () => {
 		setIsShowModal(false);
 	};

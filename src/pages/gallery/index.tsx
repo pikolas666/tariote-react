@@ -1,10 +1,10 @@
-// Gallery.js
+/* eslint-disable @next/next/no-img-element */
+
 import React, { useState, useEffect } from "react";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import styles from "./gallery.module.css";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
 import { FirebaseApp } from "../../../firebaseConfig";
-import Image from "next/image";
 
 const Gallery = () => {
 	const [gallery, setGallery] = useState("gamta/");
@@ -108,13 +108,7 @@ const Gallery = () => {
 			<div id="gallery" className={styles.gallery}>
 				{galleryItems.map((url) => (
 					<a key={url} href={url} target="_blank">
-						<Image
-							src={url}
-							alt="gallery-item"
-							width={200}
-							height={150}
-							priority
-						/>
+						<img src={url} alt="gallery-item" width={200} height={150} />
 					</a>
 				))}
 			</div>

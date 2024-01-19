@@ -126,12 +126,6 @@ const Admin = () => {
 		}
 	};
 
-	// const triggerFileInput = (name: string) => {
-	// 	// Programmatically trigger a click event on the file input
-	// 	const input = document.getElementById(name) as HTMLInputElement;
-	// 	input.click();
-	// };
-
 	const uploadImage = async (gallery: string) => {
 		try {
 			await Promise.all(

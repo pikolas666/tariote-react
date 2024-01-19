@@ -24,17 +24,15 @@ const Modal: React.FC<ModalType> = ({ closeModal }) => {
 				password
 			);
 
-			// Handle successful login
-			const user = userCredential.user;
-			console.log("User logged in");
-			setError(null); // Reset error state on successful login
+			// // Handle successful login
+			// const user = userCredential.user;
+			// console.log("User logged in");
+			// setError(null); // Reset error state on successful login
 
 			closeModal();
 		} catch (error) {
-			// Handle errors
 			console.error("Login error:", error);
 
-			// Check if the error is a string or an instance of an error
 			if (typeof error === "string") {
 				setError(error);
 			} else {

@@ -1,8 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import styles from "./Footer.module.css";
-import facebook from "../../assets/F.png";
-import instagram from "../../assets/instagram.png";
-import Image from "next/image";
 
 const Footer = () => {
 	return (
@@ -12,9 +10,9 @@ const Footer = () => {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<Image
+				<img
 					className={styles.socialFacebook}
-					src={facebook}
+					src="/assets/F.png"
 					alt="Facebook"
 					width={30}
 					height={30}
@@ -25,9 +23,9 @@ const Footer = () => {
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<Image
+				<img
 					className={styles.socialInstagram}
-					src={instagram}
+					src="/assets/instagram.png"
 					alt="Instagram"
 					width={30}
 					height={30}

@@ -1,10 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./Header.module.css";
-import Image from "next/image";
-import logo from "../../assets/tariotelogo3.png";
 import { useRouter } from "next/router";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useUser } from "../../pages/_app";
 import BurgerButton from "../BurgerButton/BurgerButton";
 
@@ -22,7 +21,6 @@ const Header: React.FC<HeaderProps> = ({ openModal }) => {
 	const [showMobileNav, setShowMobileNav] = useState(false);
 
 	const toggleMobileNav = () => {
-		console.log("hit");
 		setShowMobileNav(!showMobileNav);
 	};
 
@@ -42,13 +40,12 @@ const Header: React.FC<HeaderProps> = ({ openModal }) => {
 		<header className={styles.header}>
 			<div>
 				<Link href="/">
-					<Image
+					<img
 						className={styles.logo}
-						src={logo}
+						src="/assets/tariotelogo3.png"
 						alt="Logo"
 						width={200}
 						height={100}
-						priority
 					/>
 				</Link>
 			</div>

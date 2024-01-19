@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import styles from "./BurgerButton.module.css";
 type BurgerButtonType = {
 	toggleMobileNav: () => void;
